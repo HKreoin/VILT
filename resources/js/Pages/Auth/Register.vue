@@ -50,7 +50,7 @@ const submit = () => {
             />
 
             <div>
-                <p class="text-slate-600 mb-2">Already a user? <a href="" class="text-link">Login</a></p>
+                <p class="text-slate-600 mb-2">Already a user? <a :href="route('login')" class="text-link">Login</a></p>
                 <button class="primary-btn" :disabled="form.processing">Register</button>
             </div>
         </form>
