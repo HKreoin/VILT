@@ -1,52 +1,73 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
-import PaginationLinks from './Components/PaginationLinks.vue';
+import { router } from '@inertiajs/vue3'
+import PaginationLinks from './Components/PaginationLinks.vue'
+import { ref, watch } from 'vue'
+import { debounce } from 'lodash'
 
-defineProps({
-    users: Object
+const props = defineProps({
+  users: Object,
+  searchTerm: String,
 })
 
+const search = ref(props.searchTerm)
+
+watch(
+  search,
+  debounce(q => router.get('/', { search: q }, { preserveState: true }), 1000),
+)
+
 // Format date
-const getDate = (date) =>
-    new Date(date).toLocaleDateString("en-us", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
+const getDate = date =>
+  new Date(date).toLocaleDateString('en-us', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
 </script>
 
 <template>
+  <Head :title="` | ${$page.component}`" />
 
-    <Head :title="` | ${$page.component}`" />
-
-    <h1 class="title">List of Users</h1>
-
-    <table>
-        <thead>
-            <tr class="bg-slate-200">
-                <th>Id</th>
-                <th>Avatar</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Registration date</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="user in users.data">
-                <td>{{ user.id }}</td>
-                <td>
-                    <img :src="user.avatar ? ('/storage/' + user.avatar) : '/storage/avatars/avatardefault.png'"
-                        class="avatar">
-                </td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ getDate(user.created_at) }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- Pagination Links -->
-    <div>
-        <PaginationLinks :paginator="users" />
+  <h1 class="title">List of Users</h1>
+  <div>
+    <div class="flex justify-end mb-4">
+      <div class="w-1/4">
+        <input type="search" placeholder="Search" v-model="search" />
+      </div>
     </div>
+    <table>
+      <thead>
+        <tr class="bg-slate-200">
+          <th>Id</th>
+          <th>Avatar</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Registration date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="user in users.data" :key="user.id">
+          <td>{{ user.id }}</td>
+          <td>
+            <img
+              :src="
+                user.avatar
+                  ? '/storage/' + user.avatar
+                  : '/storage/avatars/avatardefault.png'
+              "
+              class="avatar"
+            />
+          </td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ getDate(user.created_at) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination Links -->
+  <div>
+    <PaginationLinks :paginator="users" />
+  </div>
 </template>
