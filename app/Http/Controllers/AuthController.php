@@ -21,14 +21,14 @@ class AuthController extends Controller
         ]);
 
         if ($request->hasFile('avatar')) {
-            Storage::disk('public')->put('avatars', $request->avatar);
+            $fields['avatar'] = Storage::disk('public')->put('avatars', $request->avatar);
         }
         //Register
         $user = User::create($fields);
         //Login
         Auth::login($user);
         //Redirect
-        return redirect()->route('home');
+        return redirect()->route('dashboard');
     }
 
     public function login(Request $request)
