@@ -1,5 +1,52 @@
-<template>
-    <Head :title="` | ${$page.component}`"/>
+<script setup>
+import { Link } from '@inertiajs/vue3';
+import PaginationLinks from './Components/PaginationLinks.vue';
 
-    <h1>Home page</h1>
+defineProps({
+    users: Object
+})
+
+// Format date
+const getDate = (date) =>
+    new Date(date).toLocaleDateString("en-us", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+</script>
+
+<template>
+
+    <Head :title="` | ${$page.component}`" />
+
+    <h1 class="title">List of Users</h1>
+
+    <table>
+        <thead>
+            <tr class="bg-slate-200">
+                <th>Id</th>
+                <th>Avatar</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Registration date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="user in users.data">
+                <td>{{ user.id }}</td>
+                <td>
+                    <img :src="user.avatar ? ('/storage/' + user.avatar) : '/storage/avatars/avatardefault.png'"
+                        class="avatar">
+                </td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ getDate(user.created_at) }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Pagination Links -->
+    <div>
+        <PaginationLinks :paginator="users" />
+    </div>
 </template>
