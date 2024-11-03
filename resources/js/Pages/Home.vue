@@ -13,7 +13,7 @@ const search = ref(props.searchTerm)
 
 watch(
   search,
-  debounce(q => router.get('/', { search: q }, { preserveState: true }), 1000),
+  debounce(q => router.get('/', { search: q }, { preserveState: true }), 500),
 )
 
 // Format date
@@ -43,6 +43,7 @@ const getDate = date =>
           <th>Name</th>
           <th>Email</th>
           <th>Registration date</th>
+          <th>Delete</th>
         </tr>
       </thead>
       <tbody>
@@ -61,6 +62,7 @@ const getDate = date =>
           <td>{{ user.name }}</td>
           <td>{{ user.email }}</td>
           <td>{{ getDate(user.created_at) }}</td>
+          <td><button class="bg-red-500 w-6 h-6 rounded-full"></button></td>
         </tr>
       </tbody>
     </table>

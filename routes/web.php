@@ -3,7 +3,7 @@
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
-use Illuminate\http\Request;
+use Illuminate\Http\Request;
 
 Route::get('/', function(Request $request) {
     return inertia('Home', [
